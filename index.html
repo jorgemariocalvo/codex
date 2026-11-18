@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solicitudes · Comercial Aurora</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #142d27;
+    --muted: #51645d;
+    --green: #0b5945;
+    --line: #dce5df;
+    --paper: #fff;
+    font: 16px/1.5 system-ui, sans-serif;
+    color: var(--ink);
+    background: #f4f7f3;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap { width: min(1160px, calc(100% - 40px)); margin: auto; }
+  header { background: #113b30; color: white; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-block: 18px; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; }
+  .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: #d4f085; color: #214032; font-size: 24px; }
+  .top label { display: flex; align-items: center; gap: 10px; font-size: .85rem; }
+  main { padding-block: 30px 42px; }
+  h1, h2, h3, p { margin: 0; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.055em; line-height: 1.08; }
+  h2 { font-size: 1.22rem; }
+  h3 { font-size: 1rem; }
+  p + p { margin-top: 8px; }
+  .muted, small { color: var(--muted); }
+  .hero, .panel-heading, .actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .hero p { margin-top: 8px; }
+  button, input, select, textarea { font: inherit; }
+  button, input, select, textarea { border: 1px solid #aebeb5; border-radius: 8px; background: white; color: var(--ink); min-width: 0; padding: 8px 10px; }
+  button { cursor: pointer; font-weight: 650; }
+  button:hover { background: #edf4ee; }
+  .primary { background: var(--green); border-color: var(--green); color: white; padding-inline: 16px; }
+  .primary:hover { background: #174436; }
+  :focus-visible { outline: 3px solid #65852b; outline-offset: 2px; }
+  [hidden] { display: none !important; }
+  .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-block: 22px 18px; }
+  .metric, .panel { border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+  .metric { padding: 13px 16px; }
+  .metric strong { display: block; font-size: 1.65rem; }
+  .metric span { font-size: .85rem; color: var(--muted); }
+  .panel-heading { padding: 16px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; text-align: left; }
+  th, td { padding: 12px 14px; border-top: 1px solid var(--line); }
+  th { color: var(--muted); background: #f8faf8; font-size: .8rem; white-space: nowrap; }
+  td { font-size: .9rem; }
+  td:first-child small { display: block; }
+  .ticket { color: var(--green); border: 0; background: transparent; padding: 0; text-align: left; white-space: nowrap; }
+  .badge { display: inline-block; border-radius: 20px; padding: 4px 9px; font-size: .78rem; font-weight: 650; white-space: nowrap; background: #eef1ee; }
+  .green { background: #e1f3e9; color: #15573d; }
+  .yellow { background: #fff0c4; color: #694400; }
+  .red { background: #fde8e5; color: #8b2a21; }
+  .files { padding: 16px; margin-top: 18px; }
+  .files .actions { justify-content: flex-start; margin-top: 12px; }
+  #notice { margin-top: 12px; color: var(--green); }
+  #notice.error, .form-error { color: #8b2a21; }
+  dialog { width: min(650px, calc(100% - 24px)); max-height: 92dvh; border: 1px solid var(--line); border-radius: 14px; padding: 20px; color: var(--ink); }
+  dialog::backdrop { background: #102c25a0; }
+  .dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  form label { display: grid; gap: 4px; font-size: .9rem; font-weight: 600; }
+  .wide { grid-column: 1 / -1; }
+  textarea { resize: vertical; }
+  form .actions, .detail-actions { margin-top: 14px; justify-content: flex-start; }
+  dl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  dt { color: var(--muted); font-size: .8rem; }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  #detail-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .detail-section { border-top: 1px solid var(--line); margin-top: 16px; padding-top: 12px; }
+  #history { padding-left: 21px; }
+  #history li { margin-bottom: 8px; }
+  #history small { display: block; }
+  @media (max-width: 620px) {
+    .wrap { width: calc(100% - 24px); }
+    .top { align-items: flex-start; flex-direction: column; gap: 10px; }
+    .metrics { grid-template-columns: 1fr 1fr; }
+    .filters, .filters input, .filters select { width: 100%; }
+    .grid { grid-template-columns: 1fr; }
+    th, td { padding-inline: 10px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span> Comercial Aurora</div>
+    <label>Perfil simulado <select id="profile"></select></label>
+  </div>
+</header>
+<main class="wrap">
+  <div class="hero">
+    <div><h1>Solicitudes de servicio</h1><p class="muted">Registra, asigna y consulta el seguimiento de cada caso.</p></div>
+    <button type="button" class="primary" id="new-ticket">+ Nueva solicitud</button>
+  </div>
+  <section class="metrics" aria-label="Resumen de la bandeja">
+    <div class="metric"><strong id="total">0</strong><span>Solicitudes</span></div>
+    <div class="metric"><strong id="active">0</strong><span>Abiertas</span></div>
+    <div class="metric"><strong id="late">0</strong><span>Vencidas por atender</span></div>
+    <div class="metric"><strong id="closed">0</strong><span>Cerradas</span></div>
+  </section>
+  <section class="panel" aria-labelledby="inbox-title">
+    <div class="panel-heading">
+      <div><h2 id="inbox-title">Bandeja de coordinación</h2><small id="count"></small></div>
+      <div class="filters">
+        <input type="search" id="search" aria-label="Buscar solicitudes" placeholder="Buscar por cliente o ticket">
+        <select id="state-filter" aria-label="Filtrar por estado"></select>
+      </div>
+    </div>
+    <div class="table-scroll" tabindex="0" aria-label="Tabla de solicitudes, desplazable en pantallas pequeñas">
+      <table>
+        <thead><tr><th>Solicitud</th><th>Cliente</th><th>Canal</th><th>Responsable</th><th>Estado</th><th>Plazo</th></tr></thead>
+        <tbody id="tickets"></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="panel files" aria-labelledby="files-title">
+    <h2 id="files-title">Datos de la sesión</h2>
+    <p class="muted">Usa datos ficticios. Descarga un respaldo JSON antes de cerrar la aplicación.</p>
+    <small>Directorio CSV con encabezados <code>cliente_id,nombre</code>, o JSON con un arreglo de objetos con esos campos.</small>
+    <div class="actions">
+      <button type="button" id="import-clients">Importar clientes</button>
+      <button type="button" id="export-backup">Descargar respaldo</button>
+      <button type="button" id="load-backup">Cargar respaldo</button>
+      <input type="file" id="clients-file" accept=".csv,.json" hidden>
+      <input type="file" id="backup-file" accept=".json" hidden>
+    </div>
+    <div id="notice" role="status"></div>
+  </section>
+</main>
+<dialog id="create-dialog" aria-labelledby="create-title">
+  <div class="dialog-heading"><h2 id="create-title">Nueva solicitud</h2><button type="button" data-dismiss aria-label="Cerrar formulario">×</button></div>
+  <form id="create-form">
+    <div class="grid">
+      <label>Cliente <select name="cliente_id" required></select></label>
+      <label>Contacto <input name="contacto" required maxlength="100"></label>
+      <label>Canal de origen <select name="canal" required></select></label>
+      <label>Categoría <select name="categoria" required></select></label>
+      <label>Agente responsable <select name="agente" required></select></label>
+      <label>Número de pedido (opcional) <input name="pedido"></label>
+      <label class="wide">Descripción <textarea name="descripcion" rows="3" required></textarea></label>
+    </div>
+    <p class="form-error" id="create-error" role="alert"></p>
+    <div class="actions"><button class="primary">Guardar solicitud</button><button type="button" data-dismiss>Cancelar</button></div>
+  </form>
+</dialog>
+<dialog id="detail-dialog" aria-labelledby="detail-title">
+  <div class="dialog-heading"><div><small id="detail-id"></small><h2 id="detail-title"></h2></div><button type="button" data-dismiss aria-label="Cerrar detalle">×</button></div>
+  <div class="actions"><span class="badge" id="detail-state"></span><span class="badge" id="detail-sla"></span></div>
+  <dl id="detail-meta"></dl>
+  <p id="detail-description"></p>
+  <div id="operations"></div>
+  <p class="form-error" id="detail-error" role="alert"></p>
+  <section class="detail-section"><h3>Historial</h3><ol id="history"></ol></section>
+</dialog>
+<script>
+"use strict";
+
+const byId = id => document.getElementById(id);
+const HOUR = 3600000;
+const channels = { CORREO: "Correo", WHATSAPP: "WhatsApp", TELEFONO: "Teléfono", WEB: "Web" };
+const categories = {
+  ESTADO_PEDIDO: "Estado de pedido", NOVEDAD_DESPACHO: "Novedad de despacho",
+  COTIZACION: "Cotización", FACTURACION: "Facturación", DEVOLUCION: "Devolución", OTRO: "Otro"
+};
+const states = {
+  ASIGNADO: "Asignado", EN_PROCESO: "En proceso", PENDIENTE_TERCERO: "Pendiente de tercero",
+  RESUELTO: "Resuelto", CERRADO: "Cerrado"
+};
+const transitions = {
+  ASIGNADO: ["EN_PROCESO"], EN_PROCESO: ["PENDIENTE_TERCERO", "RESUELTO"],
+  PENDIENTE_TERCERO: ["EN_PROCESO"], RESUELTO: ["CERRADO"], CERRADO: []
+};
+const bogota = new Intl.DateTimeFormat("es-CO", {
+  timeZone: "America/Bogota", dateStyle: "medium", timeStyle: "short"
+});
+const bogotaParts = new Intl.DateTimeFormat("sv-SE", {
+  timeZone: "America/Bogota", year: "numeric", month: "2-digit", day: "2-digit",
+  hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+});
+const time = value => Date.parse(value);
+const iso = value => new Date(value).toISOString();
+const now = () => iso(Math.floor(Date.now() / 1000) * 1000);
+const dateText = value => bogota.format(new Date(value));
+const has = (record, key) => Object.hasOwn(record, key);
+
+function datetimeInput(value) {
+  const parts = Object.fromEntries(bogotaParts.formatToParts(new Date(value)).map(part => [part.type, part.value]));
+  return parts.year + "-" + parts.month + "-" + parts.day + "T" + parts.hour + ":" + parts.minute + ":" + parts.second;
+}
+
+function ticketId(received, tickets) {
+  const prefix = "AUR-" + datetimeInput(received).slice(0, 7).replace("-", "") + "-";
+  const sequence = tickets.reduce((max, ticket) =>
+    ticket.id.startsWith(prefix) ? Math.max(max, Number(ticket.id.slice(-4))) : max, 0) + 1;
+  if (sequence > 9999) throw new Error("Se agotaron los identificadores para este mes.");
+  return prefix + String(sequence).padStart(4, "0");
+}
+
+function sla(ticket, clock = Date.now()) {
+  const limit = time(ticket.recibida) + 48 * HOUR;
+  if (ticket.resuelta && ticket.comunicacion) {
+    const completed = Math.max(time(ticket.resuelta), time(ticket.comunicacion.fecha));
+    return completed <= limit ? ["green", "Dentro del plazo"] : ["red", "Fuera del plazo"];
+  }
+  const remaining = limit - clock;
+  if (remaining < 0) return ["red", "Vencido"];
+  const hours = Math.floor(remaining / HOUR);
+  const minutes = Math.floor(remaining % HOUR / 60000);
+  const tone = remaining > 24 * HOUR ? "green" : remaining >= 12 * HOUR ? "yellow" : "red";
+  return [tone, hours + " h " + minutes + " min restantes"];
+}
+
+function demo() {
+  const clientes = [
+    { cliente_id: "900101001-1", nombre: "Colegio Los Cedros" },
+    { cliente_id: "900101002-2", nombre: "Estudio Norte" },
+    { cliente_id: "900101003-3", nombre: "Colegio Horizonte" },
+    { cliente_id: "900101004-4", nombre: "Papelería La Estación" }
+  ];
+  const perfiles = [
+    { id: "coord", nombre: "Coordinación", rol: "coordinador" },
+    { id: "a1", nombre: "Laura Méndez", rol: "agente" },
+    { id: "a2", nombre: "Diego Rojas", rol: "agente" },
+    { id: "a3", nombre: "Sofía León", rol: "agente" },
+    { id: "a4", nombre: "Mateo Díaz", rol: "agente" }
+  ];
+  const ejemplos = [
+    [7, 0, "a1", "WHATSAPP", "ESTADO_PEDIDO", "Consulta por la entrega de material escolar.", "ASIGNADO"],
+    [29, 1, "a2", "CORREO", "COTIZACION", "Cotización de papel y carpetas para la oficina.", "EN_PROCESO"],
+    [55, 2, "a3", "TELEFONO", "NOVEDAD_DESPACHO", "Faltan dos cajas en la entrega.", "PENDIENTE_TERCERO"],
+    [44, 3, "a4", "WEB", "FACTURACION", "Solicita una copia de la factura.", "RESUELTO"],
+    [66, 0, "a2", "CORREO", "DEVOLUCION", "Devolución de un paquete de carpetas.", "CERRADO"]
+  ];
+  const solicitudes = [];
+  const clock = Math.floor(Date.now() / 1000) * 1000;
+  for (const [age, client, agente, canal, categoria, descripcion, estado] of ejemplos) {
+    const start = clock - age * HOUR;
+    const recibida = iso(start);
+    const resuelta = ["RESUELTO", "CERRADO"].includes(estado) ? iso(start + 8 * HOUR) : null;
+    const comunicacion = estado === "CERRADO" ? { fecha: iso(start + 9 * HOUR), canal } : null;
+    const historial = [{ fecha: recibida, perfil: "coord", texto: "Solicitud registrada · Asignado a " + perfiles.find(p => p.id === agente).nombre }];
+    if (estado !== "ASIGNADO") historial.push({ fecha: iso(start + HOUR), perfil: agente, texto: "Estado: En proceso" });
+    if (estado === "PENDIENTE_TERCERO") historial.push({ fecha: iso(start + 2 * HOUR), perfil: agente, texto: "Estado: Pendiente de tercero" });
+    if (resuelta) historial.push({ fecha: resuelta, perfil: agente, texto: "Estado: Resuelto" });
+    if (comunicacion) {
+      historial.push({ fecha: comunicacion.fecha, perfil: agente, texto: "Solución comunicada por " + channels[canal] });
+      historial.push({ fecha: iso(start + 10 * HOUR), perfil: agente, texto: "Estado: Cerrado" });
+    }
+    solicitudes.push({
+      id: ticketId(recibida, solicitudes), cliente_id: clientes[client].cliente_id,
+      contacto: "Contacto de demostración", agente, canal, categoria, descripcion, estado,
+      pedido: "", recibida, resuelta, comunicacion, historial
+    });
+  }
+  return { version: 1, clientes, perfiles, solicitudes };
+}
+
+let data = demo();
+let profileId = "coord";
+let selectedId = null;
+const profile = () => data.perfiles.find(item => item.id === profileId);
+const agents = () => data.perfiles.filter(item => item.rol === "agente");
+const person = id => data.perfiles.find(item => item.id === id).nombre;
+const clientName = id => data.clientes.find(item => item.cliente_id === id).nombre;
+const coordinator = () => profile().rol === "coordinador";
+const canManage = ticket => coordinator() || ticket.agente === profileId;
+
+function element(tag, value, className) {
+  const node = document.createElement(tag);
+  if (value !== undefined) node.textContent = value;
+  if (className) node.className = className;
+  return node;
+}
+
+function setOptions(select, entries, placeholder) {
+  const options = entries.map(([value, label]) => new Option(label, value));
+  if (placeholder !== undefined) options.unshift(new Option(placeholder, ""));
+  select.replaceChildren(...options);
+}
+
+function setBadge(node, [tone, label]) {
+  node.className = "badge " + tone;
+  node.textContent = label;
+}
+
+function renderProfiles() {
+  setOptions(byId("profile"), data.perfiles.map(item => [item.id, item.nombre]));
+  byId("profile").value = profileId;
+}
+
+function renderInbox() {
+  const visible = data.solicitudes.filter(canManage);
+  const clock = Math.floor(Date.now() / 1000) * 1000;
+  const query = byId("search").value.trim().toLocaleLowerCase("es");
+  const state = byId("state-filter").value;
+  const rows = visible.filter(ticket => {
+    const searchable = [ticket.id, clientName(ticket.cliente_id), ticket.pedido].join(" ").toLocaleLowerCase("es");
+    return (!state || ticket.estado === state) && searchable.includes(query);
+  }).sort((a, b) => time(b.recibida) - time(a.recibida) || b.id.localeCompare(a.id));
+  byId("inbox-title").textContent = coordinator() ? "Bandeja de coordinación" : "Mis solicitudes";
+  byId("count").textContent = rows.length + " de " + visible.length + " solicitudes";
+  byId("total").textContent = visible.length;
+  byId("active").textContent = visible.filter(ticket => ticket.estado !== "CERRADO").length;
+  byId("closed").textContent = visible.filter(ticket => ticket.estado === "CERRADO").length;
+  byId("late").textContent = visible.filter(ticket => sla(ticket, clock)[1] === "Vencido").length;
+  const body = byId("tickets");
+  const focus = document.activeElement?.dataset.ticket;
+  body.replaceChildren();
+  for (const ticket of rows) {
+    const row = body.insertRow();
+    const label = element("button", ticket.id, "ticket");
+    label.type = "button";
+    label.dataset.ticket = ticket.id;
+    label.addEventListener("click", () => openDetail(ticket.id));
+    row.insertCell().append(label, element("small", categories[ticket.categoria]));
+    row.insertCell().textContent = clientName(ticket.cliente_id);
+    row.insertCell().textContent = channels[ticket.canal];
+    row.insertCell().textContent = person(ticket.agente);
+    row.insertCell().append(element("span", states[ticket.estado], "badge"));
+    const indicator = element("span");
+    setBadge(indicator, sla(ticket, clock));
+    row.insertCell().append(indicator);
+    if (focus === ticket.id) label.focus();
+  }
+  if (!rows.length) {
+    const cell = body.insertRow().insertCell();
+    cell.colSpan = 6;
+    cell.textContent = "No hay solicitudes que coincidan con esta vista.";
+  }
+}
+
+function addEvent(ticket, texto, fecha = now()) {
+  ticket.historial.push({ fecha, perfil: profileId, texto });
+}
+
+function submitOperation(id, operation) {
+  try {
+    const ticket = data.solicitudes.find(item => item.id === id);
+    if (!ticket || !canManage(ticket)) throw new Error("La solicitud no está disponible para este perfil.");
+    operation(ticket);
+    renderInbox();
+    renderDetail(ticket);
+  } catch (error) {
+    byId("detail-error").textContent = error.message;
+  }
+}
+
+function changeState(ticket, next) {
+  if (!transitions[ticket.estado].includes(next)) throw new Error("El cambio de estado no está disponible.");
+  if (next === "CERRADO" && !ticket.comunicacion) throw new Error("Registra la comunicación al cliente antes de cerrar.");
+  const fecha = now();
+  ticket.estado = next;
+  if (next === "RESUELTO") ticket.resuelta = fecha;
+  addEvent(ticket, "Estado: " + states[next], fecha);
+}
+
+function registerCommunication(ticket, value, canal) {
+  if (ticket.estado !== "RESUELTO" || ticket.comunicacion) throw new Error("La comunicación requiere una solicitud resuelta.");
+  const instant = time(value + "-05:00");
+  if (!Number.isFinite(instant) || instant < time(ticket.resuelta) || instant > Date.now()) {
+    throw new Error("Indica una fecha y hora entre la resolución y el momento actual.");
+  }
+  if (!has(channels, canal)) throw new Error("Selecciona un canal de comunicación.");
+  ticket.comunicacion = { fecha: iso(instant), canal };
+  addEvent(ticket, "Solución comunicada por " + channels[canal] + " · " + dateText(ticket.comunicacion.fecha));
+}
+
+function reassign(ticket, agentId) {
+  if (!coordinator() || ticket.estado === "CERRADO") throw new Error("La reasignación no está disponible.");
+  if (!agents().some(agent => agent.id === agentId) || ticket.agente === agentId) {
+    throw new Error("Elige un agente diferente.");
+  }
+  const previous = ticket.agente;
+  ticket.agente = agentId;
+  addEvent(ticket, "Reasignado de " + person(previous) + " a " + person(agentId));
+}
+
+function button(label, onClick, className) {
+  const node = element("button", label, className);
+  node.type = "button";
+  node.addEventListener("click", onClick);
+  return node;
+}
+
+function renderDetail(ticket) {
+  byId("detail-id").textContent = ticket.id;
+  byId("detail-title").textContent = clientName(ticket.cliente_id);
+  byId("detail-state").textContent = states[ticket.estado];
+  setBadge(byId("detail-sla"), sla(ticket));
+  byId("detail-description").textContent = ticket.descripcion;
+  const entries = [
+    ["Responsable", person(ticket.agente)], ["Contacto", ticket.contacto],
+    ["Canal de origen", channels[ticket.canal]], ["Categoría", categories[ticket.categoria]],
+    ["Recepción · hora de Colombia", dateText(ticket.recibida)],
+    ["Límite · hora de Colombia", dateText(time(ticket.recibida) + 48 * HOUR)]
+  ];
+  if (ticket.pedido) entries.push(["Pedido", ticket.pedido]);
+  if (ticket.resuelta) entries.push(["Resolución", dateText(ticket.resuelta)]);
+  if (ticket.comunicacion) entries.push(["Comunicación", dateText(ticket.comunicacion.fecha) + " · " + channels[ticket.comunicacion.canal]]);
+  byId("detail-meta").replaceChildren(...entries.map(([label, value]) => {
+    const field = element("div");
+    field.append(element("dt", label), element("dd", value));
+    return field;
+  }));
+  byId("history").replaceChildren(...ticket.historial.slice().sort((a, b) => time(a.fecha) - time(b.fecha)).map(event => {
+    const item = element("li", event.texto);
+    item.append(element("small", dateText(event.fecha) + " · " + person(event.perfil)));
+    return item;
+  }));
+  byId("detail-error").textContent = "";
+  const operations = byId("operations");
+  operations.replaceChildren();
+  const nextActions = {
+    EN_PROCESO: ticket.estado === "PENDIENTE_TERCERO" ? "Retomar atención" : "Iniciar atención",
+    PENDIENTE_TERCERO: "Esperar a un tercero", RESUELTO: "Marcar como resuelto", CERRADO: "Cerrar solicitud"
+  };
+  const actions = element("div", undefined, "actions detail-actions");
+  for (const next of transitions[ticket.estado]) {
+    actions.append(button(nextActions[next], () => submitOperation(ticket.id, record => changeState(record, next))));
+  }
+  operations.append(actions);
+  if (ticket.estado === "RESUELTO" && !ticket.comunicacion) {
+    const form = element("form", undefined, "detail-section");
+    form.innerHTML = '<h3>Comunicación al cliente</h3><div class="grid"><label>Fecha y hora de Colombia <input name="fecha" type="datetime-local" step="1" required></label><label>Canal de comunicación <select name="canal" required></select></label></div><div class="actions"><button class="primary">Registrar comunicación</button></div>';
+    form.elements.fecha.value = datetimeInput(Date.now());
+    form.elements.fecha.min = datetimeInput(ticket.resuelta);
+    setOptions(form.elements.canal, Object.entries(channels), "Selecciona un canal");
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      submitOperation(ticket.id, record => registerCommunication(record, form.elements.fecha.value, form.elements.canal.value));
+    });
+    operations.append(form);
+  }
+  if (coordinator() && ticket.estado !== "CERRADO") {
+    const form = element("form", undefined, "detail-section");
+    form.innerHTML = '<label>Nuevo responsable <select name="responsable" required></select></label><div class="actions"><button>Reasignar</button></div>';
+    setOptions(form.elements.responsable, agents().filter(agent => agent.id !== ticket.agente).map(agent => [agent.id, agent.nombre]), "Selecciona un agente");
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      submitOperation(ticket.id, record => reassign(record, form.elements.responsable.value));
+    });
+    operations.append(form);
+  }
+}
+
+function openDetail(id) {
+  const ticket = data.solicitudes.find(item => item.id === id);
+  if (!ticket || !canManage(ticket)) return;
+  selectedId = id;
+  renderDetail(ticket);
+  byId("detail-dialog").showModal();
+}
+
+const createForm = byId("create-form");
+byId("new-ticket").addEventListener("click", () => {
+  createForm.reset();
+  byId("create-error").textContent = "";
+  const fields = createForm.elements;
+  setOptions(fields.cliente_id, data.clientes.map(client => [client.cliente_id, client.nombre + " · " + client.cliente_id]), "Selecciona un cliente");
+  setOptions(fields.canal, Object.entries(channels), "Selecciona un canal");
+  setOptions(fields.categoria, Object.entries(categories), "Selecciona una categoría");
+  const allowed = coordinator() ? agents() : [profile()];
+  setOptions(fields.agente, allowed.map(agent => [agent.id, agent.nombre]), "Selecciona un agente");
+  byId("create-dialog").showModal();
+});
+
+function createTicket(input) {
+  const values = Object.fromEntries([...input].map(([key, value]) => [key, value.trim()]));
+  if (!data.clientes.some(client => client.cliente_id === values.cliente_id)) throw new Error("Selecciona un cliente del directorio.");
+  if (!agents().some(agent => agent.id === values.agente) || (!coordinator() && values.agente !== profileId)) {
+    throw new Error("Selecciona un agente permitido para tu perfil.");
+  }
+  if (!values.contacto || values.contacto.length > 100 || !values.descripcion) throw new Error("Completa el contacto y la descripción.");
+  if (!has(channels, values.canal) || !has(categories, values.categoria)) throw new Error("Selecciona un canal y una categoría.");
+  const recibida = now();
+  const ticket = {
+    ...values, id: ticketId(recibida, data.solicitudes), recibida,
+    estado: "ASIGNADO", resuelta: null, comunicacion: null, historial: []
+  };
+  addEvent(ticket, "Solicitud registrada · Asignado a " + person(ticket.agente), recibida);
+  data.solicitudes.push(ticket);
+  return ticket;
+}
+
+createForm.addEventListener("submit", event => {
+  event.preventDefault();
+  try {
+    const ticket = createTicket(new FormData(createForm));
+    byId("create-dialog").close();
+    byId("search").value = "";
+    byId("state-filter").value = "";
+    renderInbox();
+    openDetail(ticket.id);
+  } catch (error) {
+    byId("create-error").textContent = error.message;
+  }
+});
+
+function parseCsv(input) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let mode = "plain";
+  const source = input.replace(/^\uFEFF/, "").replace(/\r\n?/g, "\n");
+  for (let index = 0; index < source.length; index++) {
+    const char = source[index];
+    if (mode === "quoted") {
+      if (char === '"' && source[index + 1] === '"') {
+        field += '"';
+        index++;
+      } else if (char === '"') {
+        mode = "closed";
+      } else {
+        field += char;
+      }
+    } else if (char === "," || char === "\n") {
+      row.push(field);
+      field = "";
+      mode = "plain";
+      if (char === "\n") {
+        rows.push(row);
+        row = [];
+      }
+    } else if (char === '"' && mode === "plain" && !field) {
+      mode = "quoted";
+    } else if (char === '"' || mode === "closed") {
+      throw new Error("El CSV contiene comillas mal formadas.");
+    } else {
+      field += char;
+    }
+  }
+  if (mode === "quoted") throw new Error("El CSV contiene un campo sin cerrar.");
+  if (row.length || field || mode === "closed") rows.push([...row, field]);
+  const [header, ...clients] = rows;
+  if (!header || header.map(field => field.trim()).join(",") !== "cliente_id,nombre") {
+    throw new Error("Usa los encabezados cliente_id,nombre.");
+  }
+  return clients.map((values, index) => {
+    if (values.length !== 2) throw new Error("La fila " + (index + 2) + " debe tener dos columnas.");
+    return { cliente_id: values[0], nombre: values[1] };
+  });
+}
+
+const present = value => typeof value === "string" && Boolean(value.trim());
+const validDate = value => typeof value === "string" && Number.isFinite(time(value)) && iso(time(value)) === value;
+
+function validateClients(records, existing = []) {
+  if (!Array.isArray(records) || !records.length) throw new Error("El directorio debe contener al menos un cliente.");
+  const ids = new Set(existing.map(client => client.cliente_id));
+  return records.map((client, index) => {
+    if (!present(client?.cliente_id) || !present(client?.nombre)) {
+      throw new Error("El cliente " + (index + 1) + " requiere identificador y nombre.");
+    }
+    const cliente_id = client.cliente_id.trim();
+    if (ids.has(cliente_id)) throw new Error("Identificador de cliente duplicado: " + cliente_id);
+    ids.add(cliente_id);
+    return { cliente_id, nombre: client.nombre.trim() };
+  });
+}
+
+function validateBackup(raw) {
+  if (raw?.version !== 1 || !Array.isArray(raw.perfiles) || !Array.isArray(raw.solicitudes)) {
+    throw new Error("Formato de respaldo incompatible.");
+  }
+  const clientes = validateClients(raw.clientes);
+  const clientIds = new Set(clientes.map(client => client.cliente_id));
+  const profileIds = new Set();
+  const agentIds = new Set();
+  for (const item of raw.perfiles) {
+    if (!present(item?.id) || !present(item?.nombre) || profileIds.has(item.id) ||
+        !["coordinador", "agente"].includes(item.rol)) throw new Error("El respaldo contiene un perfil inválido.");
+    profileIds.add(item.id);
+    if (item.rol === "agente") agentIds.add(item.id);
+  }
+  if (raw.perfiles.length !== 5 || agentIds.size !== 4) throw new Error("Se requieren cuatro agentes y un coordinador.");
+  const ticketIds = new Set();
+  for (const ticket of raw.solicitudes) {
+    if (!ticket || typeof ticket.id !== "string" || !/^AUR-\d{4}(0[1-9]|1[0-2])-\d{4}$/.test(ticket.id) ||
+        ticket.id.endsWith("-0000") || ticketIds.has(ticket.id) || !clientIds.has(ticket.cliente_id) ||
+        !agentIds.has(ticket.agente) || !present(ticket.contacto) || ticket.contacto.length > 100 ||
+        !present(ticket.descripcion) || typeof ticket.pedido !== "string" || !has(channels, ticket.canal) ||
+        !has(categories, ticket.categoria) || !has(states, ticket.estado) || !validDate(ticket.recibida) ||
+        !ticket.id.startsWith("AUR-" + datetimeInput(ticket.recibida).slice(0, 7).replace("-", "") + "-")) {
+      throw new Error("El respaldo contiene una solicitud inválida o con referencias desconocidas.");
+    }
+    ticketIds.add(ticket.id);
+    const completed = ["RESUELTO", "CERRADO"].includes(ticket.estado);
+    if ((completed && (!validDate(ticket.resuelta) || time(ticket.resuelta) < time(ticket.recibida))) ||
+        (!completed && ticket.resuelta !== null)) throw new Error("Fecha de resolución inválida en " + ticket.id);
+    const communication = ticket.comunicacion;
+    if ((ticket.estado === "CERRADO" && !communication) ||
+        (communication !== null && (!completed || !validDate(communication?.fecha) ||
+          time(communication.fecha) < time(ticket.resuelta) || !has(channels, communication.canal)))) {
+      throw new Error("Registro de comunicación inválido en " + ticket.id);
+    }
+    if (!Array.isArray(ticket.historial) || !ticket.historial.length ||
+        ticket.historial.some(event => !validDate(event?.fecha) || time(event.fecha) < time(ticket.recibida) ||
+          !profileIds.has(event.perfil) || !present(event.texto))) throw new Error("Historial inválido en " + ticket.id);
+  }
+  return { version: 1, clientes, perfiles: raw.perfiles, solicitudes: raw.solicitudes };
+}
+
+function notice(message, failed = false) {
+  const node = byId("notice");
+  node.classList.toggle("error", failed);
+  node.textContent = message;
+}
+
+function handleFile(buttonId, inputId, handle) {
+  const input = byId(inputId);
+  byId(buttonId).addEventListener("click", () => input.click());
+  input.addEventListener("change", async () => {
+    const file = input.files[0];
+    input.value = "";
+    if (!file) return;
+    try {
+      const source = (await file.text()).replace(/^\uFEFF/, "");
+      handle(source, file.name);
+    } catch (error) {
+      notice("Archivo rechazado. " + (error instanceof SyntaxError ? "El JSON no tiene un formato válido." : error.message), true);
+    }
+  });
+}
+
+handleFile("import-clients", "clients-file", (source, name) => {
+  const records = /\.csv$/i.test(name) ? parseCsv(source) : JSON.parse(source);
+  const additions = validateClients(records, data.clientes);
+  data.clientes.push(...additions);
+  notice("Clientes importados: " + additions.length + ".");
+  renderInbox();
+});
+handleFile("load-backup", "backup-file", source => {
+  const restored = validateBackup(JSON.parse(source));
+  if (!window.confirm("¿Reemplazar los datos actuales con los del respaldo?")) {
+    notice("Carga cancelada.");
+    return;
+  }
+  data = restored;
+  profileId = data.perfiles.find(item => item.rol === "coordinador").id;
+  byId("search").value = "";
+  byId("state-filter").value = "";
+  renderProfiles();
+  renderInbox();
+  notice("Respaldo recuperado.");
+});
+byId("export-backup").addEventListener("click", () => {
+  const payload = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(payload);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "aurora-respaldo-" + datetimeInput(Date.now()).slice(0, 10) + ".json";
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  notice("Respaldo descargado.");
+});
+
+document.querySelectorAll("[data-dismiss]").forEach(control => {
+  control.addEventListener("click", () => control.closest("dialog").close());
+});
+byId("detail-dialog").addEventListener("close", () => { selectedId = null; });
+byId("profile").addEventListener("change", event => {
+  profileId = event.target.value;
+  byId("search").value = "";
+  byId("state-filter").value = "";
+  if (byId("detail-dialog").open) byId("detail-dialog").close();
+  if (byId("create-dialog").open) byId("create-dialog").close();
+  renderInbox();
+});
+byId("search").addEventListener("input", renderInbox);
+byId("state-filter").addEventListener("change", renderInbox);
+setOptions(byId("state-filter"), Object.entries(states), "Todos los estados");
+renderProfiles();
+renderInbox();
+setInterval(() => {
+  renderInbox();
+  if (byId("detail-dialog").open) {
+    const ticket = data.solicitudes.find(item => item.id === selectedId);
+    if (ticket) setBadge(byId("detail-sla"), sla(ticket));
+  }
+}, 30000);
+</script>
+</body>
+</html>
